@@ -216,5 +216,5 @@ workflows:
           requires: [build-frontend, build-backend]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
-      - notify
+      - notify:
           requires: [deploy-infrastructure]
