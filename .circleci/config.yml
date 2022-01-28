@@ -111,7 +111,8 @@ jobs:
 
   deploy-infrastructure:
     docker:
-      - image: amazon/aws-cli # Docker image here that supports AWS CLI
+      # - image: amazon/aws-cli # Docker image here that supports AWS CLI
+      - image: << pipeline.parameters.py_alp_image >>
     steps:
       - checkout
       - run: yum -y install tar gzip
