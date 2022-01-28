@@ -185,10 +185,13 @@ jobs:
           command: |
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
-            # Your code here
-            exit 1
       # Here's where you will add some code to rollback on failure 
       - notify   
+  check:
+    steps:
+      - run:
+          command: exit 1
+      - notify
 workflows:
   default:
     jobs:
@@ -206,4 +209,5 @@ workflows:
          # requires: [build-frontend, build-backend]
       - configure-infrastructure
      #     requires: [deploy-infrastructure]
+      - check
       
