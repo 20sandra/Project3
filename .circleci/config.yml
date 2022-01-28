@@ -16,12 +16,9 @@ commands:
             aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
             aws cloudformation delete-stack --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
             exit 1
-jobs:
 
-  notify:
-    docker:
-      - image: 'cimg/base:stable'
-    steps:
+    notify:
+      steps:
       - slack/notify:
           custom: |
             {
@@ -39,6 +36,12 @@ jobs:
               ]
             }
           event: fail
+jobs:
+
+  notify:
+    docker:
+      - image: 'cimg/base:stable'
+    
   build-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -174,8 +177,7 @@ jobs:
             - project/.circleci/ansible/inventory.txt
       # Here's where you will add some code to rollback on failure 
       # - destroy-environment
-      - notify:
-          event: on_fail
+      - notify
 
   configure-infrastructure:
     docker:
