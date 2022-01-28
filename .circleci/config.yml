@@ -188,6 +188,8 @@ jobs:
       # Here's where you will add some code to rollback on failure 
       - notify   
   check:
+    docker:
+      - image: circleci/node:13.8.0
     steps:
       - run:
           command: exit 1
