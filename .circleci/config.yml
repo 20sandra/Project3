@@ -179,7 +179,7 @@ jobs:
             apk add --update gzip
             apk add --update ansible
             pip install awscli --upgrade 
-            exit 1
+            
       - run:
           name: Configure server
           command: |
@@ -187,7 +187,8 @@ jobs:
             ansible-playbook -i inventory.txt configure-server.yml
             # Your code here
             exit 1
-      # Here's where you will add some code to rollback on failure    
+      # Here's where you will add some code to rollback on failure 
+      - notify   
 workflows:
   default:
     jobs:
@@ -201,8 +202,8 @@ workflows:
       #     requires: [build-frontend]
       # - scan-backend:
       #     requires: [build-backend]
-      - deploy-infrastructure
+     # - deploy-infrastructure
          # requires: [build-frontend, build-backend]
       - configure-infrastructure:
-          requires: [deploy-infrastructure]
+     #     requires: [deploy-infrastructure]
       
