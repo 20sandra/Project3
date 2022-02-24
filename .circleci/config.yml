@@ -202,7 +202,7 @@ jobs:
             ansible-playbook -i inventory.txt configure-server.yml
       # Here's where you will add some code to rollback on failure 
       #- notify
-      - destroy-environment 
+      # - destroy-environment 
  
   run-migrations:
     docker:
