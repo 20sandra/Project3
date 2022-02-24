@@ -24,22 +24,6 @@ commands:
           template: basic_fail_1
           event: fail
 
-  revert-migrations:
-    description: Revert migration  
-    steps:
-      - run:
-          name: Revert migrations
-          when: on_fail
-          # Add when this will run
-          command: |
-            migrationSuccess=$(curl -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" \
-            --request GET https://api.memstash.io/values/migration_status_${CIRCLE_WORKFLOW_ID})
-            if [[ $migrationSuccess==1 ]]
-            then
-              cd backend
-              npm install
-              npm run migrations:revert
-            fi
 
 jobs:
     
@@ -296,6 +280,6 @@ workflows:
           requires: [deploy-infrastructure]
       - run-migrations:
           requires: [configure-infrastructure]
-      - deploy-frontend:
-           requires: [run-migrations]
+      # - deploy-frontend:
+      #      requires: [run-migrations]
       
