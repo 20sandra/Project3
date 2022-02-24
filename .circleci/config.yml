@@ -185,6 +185,7 @@ jobs:
             
       - run:
           name: Configure server
+          no_output_timeout: 30m
           command: |
             cd .circleci/ansible
             export ANSIBLE_HOST_KEY_CHECKING=False
