@@ -127,7 +127,7 @@ jobs:
       # - image: << pipeline.parameters.py_alp_image >>
     steps:
       - checkout
-      - run: yum -y install tar gzip
+      - run: yum -y install tar gzip git
       - run:
           name: Ensure back-end infrastructure exists
           command: |
@@ -179,7 +179,7 @@ jobs:
           command: |
             apk add --update tar
             apk add --update gzip
-            apk add --update ansible
+            apk add --update ansible nodejs npm
             apk add --update openssh-client
             pip install awscli --upgrade 
             
