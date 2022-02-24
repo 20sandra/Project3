@@ -180,11 +180,23 @@ jobs:
             apk add --update tar
             apk add --update gzip
             apk add --update ansible
+            apk add --update openssh-client
             pip install awscli --upgrade 
             
       - run:
           name: Configure server
           command: |
+            echo ENVIRONMENT=$ENVIRONMENT >> backend/.env
+            echo TYPEORM_CONNECTION=$TYPEORM_CONNECTION >> backend/.env
+            echo TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR >> backend/.env
+            echo TYPEORM_ENTITIES=$TYPEORM_ENTITIES >> backend/.env
+            echo TYPEORM_MIGRATIONS=$TYPEORM_MIGRATIONS >> backend/.env
+            echo TYPEORM_HOST=$TYPEORM_HOST >> backend/.env
+            echo TYPEORM_PORT=$TYPEORM_PORT >> backend/.env
+            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> backend/.env
+            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> backend/.env
+            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> backend/.env
+            cat backend/.env
             cd .circleci/ansible
             export ANSIBLE_HOST_KEY_CHECKING=False
             ansible-playbook -i inventory.txt configure-server.yml
@@ -205,20 +217,10 @@ jobs:
             cd backend
             npm install
             npm run migrations > migrations_dump.txt
-      - run:
-          name: send variables 
-          command: |
-            echo ENVIRONMENT=$ENVIRONMENT >> backend/.env
-            echo TYPEORM_CONNECTION=$TYPEORM_CONNECTION >> backend/.env
-            echo TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR >> backend/.env
-            echo TYPEORM_ENTITIES=$TYPEORM_ENTITIES >> backend/.env
-            echo TYPEORM_MIGRATIONS=$TYPEORM_MIGRATIONS >> backend/.env
-            echo TYPEORM_HOST=$TYPEORM_HOST >> backend/.env
-            echo TYPEORM_PORT=$TYPEORM_PORT >> backend/.env
-            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> backend/.env
-            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> backend/.env
-            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> backend/.env
-            cat backend/.env
+      # - run:
+      #     name: send variables 
+      #     command: |
+          
       - run:
           name: Send migration results to KVdb
           command: |
