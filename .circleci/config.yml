@@ -255,6 +255,43 @@ jobs:
      # - revert-migrations
      # - notify
       # Here's where you will add some code to rollback on failure  
+ 
+  deploy-backend:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: 
+            - "65:79:a9:6d:80:39:06:bc:85:9d:a1:bc:d3:ac:dc:39"
+      - attach_workspace:
+          at: .circleci/ansible
+      - run:
+          name: Install dependencies
+          working_directory: ./.circleci/ansible
+          command: |
+            apk add --update tar gzip curl
+            apk add --update openssh-client
+            apk add --update nodejs npm
+            apk add --update ansible
+      - run:
+          name: Deploy Backend with ansible
+          command: |
+            cd backend
+            npm i
+            npm run build
+            cp package* ./dist
+            cd ..
+            tar -C backend -czvf artifact.tar.gz .
+            pwd
+            cd .circleci/ansible
+            echo "Contents  of the inventory.txt file is -------"
+            ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
+     
+      # - destroy-environment # Rollback on failure  
+      # - revert-migrations
+     
+
 workflows:
   default:
     jobs:
@@ -276,4 +313,6 @@ workflows:
            requires: [deploy-infrastructure]
       - deploy-frontend:
             requires: [run-migrations]
+      -deploy-backend:
+            requires: [deploy-frontend]
       
