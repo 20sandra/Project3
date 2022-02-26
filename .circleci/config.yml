@@ -307,11 +307,11 @@ jobs:
           name: Install dependencies
           command: |
               apk add --update ansible  nodejs npm
-            #  pip3 install awscli
+            # pip3 install awscli
               apk update
               apk upgrade
               apk add curl
-             # apk add --no-cache --upgrade bash   
+            # apk add --no-cache --upgrade bash   
       - run:
           name: Backend smoke test.
           command: |
