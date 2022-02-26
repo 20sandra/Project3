@@ -124,7 +124,6 @@ jobs:
   deploy-infrastructure:
     docker:
       - image: amazon/aws-cli # Docker image here that supports AWS CLI
-      # - image: << pipeline.parameters.py_alp_image >>
     steps:
       - checkout
       - run: yum -y install tar gzip git
@@ -265,10 +264,9 @@ jobs:
           fingerprints: 
             - "65:79:a9:6d:80:39:06:bc:85:9d:a1:bc:d3:ac:dc:39"
       - attach_workspace:
-          at: .circleci/ansible
+          at: ~/
       - run:
           name: Install dependencies
-          working_directory: ./.circleci/ansible
           command: |
             apk add --update tar gzip curl
             apk add --update openssh-client
@@ -286,7 +284,11 @@ jobs:
             pwd
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
-            ANSIBLE_HOST_KEY_CHECKING=False 
+          # echo "[web]" >> backend/inventory.txt
+            aws ec2 describe-instances \
+              --filters Name=tag:Name,Values="backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --output text >> .circleci/ansible//inventory.txt
             ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
      
       # - destroy-environment # Rollback on failure  
