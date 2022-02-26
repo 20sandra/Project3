@@ -285,7 +285,7 @@ jobs:
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
             export ANSIBLE_HOST_KEY_CHECKING=False
-            ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
+            ansible-playbook -i inventory.txt deploy-backend.yml
           # echo "[web]" >> backend/inventory.txt
           # aws ec2 describe-instances \
           #   --filters Name=tag:Name,Values="backend-${CIRCLE_WORKFLOW_ID:0:7}" \
