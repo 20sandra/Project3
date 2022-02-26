@@ -284,6 +284,7 @@ jobs:
             pwd
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
+            export ANSIBLE_HOST_KEY_CHECKING=False
             ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
           # echo "[web]" >> backend/inventory.txt
           # aws ec2 describe-instances \
